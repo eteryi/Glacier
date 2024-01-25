@@ -3,8 +3,8 @@
   "id": "examplemod",
   "version": "${version}",
 
-  "name": "Example Mod",
-  "description": "This mod aims to help new BTA modders.",
+  "name": "Glacier",
+  "description": "A server-side modding library.",
   "authors": [
     "Turnip Labs"
   ],

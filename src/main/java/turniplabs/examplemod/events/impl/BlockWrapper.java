@@ -17,4 +17,8 @@ public class BlockWrapper {
 		this.world = world;
 		this.block = world.getBlock(x,y,z);
 	}
+
+	public int getId() {
+		return world.getBlockId(x, y, z);
+	}
 }

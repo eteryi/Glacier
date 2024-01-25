@@ -25,7 +25,6 @@ public class BlockChestMixin {
 			GlacierEvents.runEventsFor(ChestOpenEvent.class, event);
 
 			if (event.isCancelled()) {
-				System.out.println("was cancelled");
 				cir.setReturnValue(false);
 				cir.cancel();
 			}
