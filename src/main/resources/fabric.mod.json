@@ -19,16 +19,16 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.ExampleMod"
+			"turniplabs.examplemod.Glacier"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"turniplabs.examplemod.Glacier"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.ExampleMod"
+			"turniplabs.examplemod.Glacier"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.ExampleMod"
+			"turniplabs.examplemod.Glacier"
 		]
 	},
   "mixins": [
