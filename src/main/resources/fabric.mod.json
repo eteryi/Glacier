@@ -1,12 +1,12 @@
 {
   "schemaVersion": 1,
-  "id": "examplemod",
+  "id": "glacier",
   "version": "${version}",
 
   "name": "Glacier",
   "description": "A server-side modding library.",
   "authors": [
-    "Turnip Labs"
+    "Cross"
   ],
   "contact": {
     "homepage": "",
@@ -19,20 +19,20 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-			"turniplabs.examplemod.Glacier"
+      "cross.glacier.Glacier"
     ],
 		"beforeGameStart": [
-			"turniplabs.examplemod.Glacier"
+          "cross.glacier.Glacier"
 		],
 		"afterGameStart": [
-			"turniplabs.examplemod.Glacier"
+          "cross.glacier.Glacier"
 		],
 		"recipesReady": [
-			"turniplabs.examplemod.Glacier"
+          "cross.glacier.Glacier"
 		]
 	},
   "mixins": [
-      "examplemod.mixins.json"
+		"glacier.mixins.json"
   ],
 
   "depends": {
