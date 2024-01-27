@@ -1,10 +1,12 @@
 package cross.glacier.mixin;
 
 
-import cross.glacier.events.impl.BlockBreakEvent;
-import cross.glacier.events.impl.BlockWrapper;
-import cross.glacier.events.impl.PlayerChatEvent;
-import cross.glacier.events.impl.PlayerQuitEvent;
+import cross.glacier.events.GlacierEvents;
+import cross.glacier.events.impl.*;
+import cross.glacier.events.wrappers.BlockWrapper;
+import cross.glacier.inventory.GlacierInventory;
+import net.minecraft.core.net.packet.Packet101CloseWindow;
+import net.minecraft.core.net.packet.Packet102WindowClick;
 import net.minecraft.core.net.packet.Packet14BlockDig;
 import net.minecraft.core.net.packet.Packet3Chat;
 import net.minecraft.server.entity.player.EntityPlayerMP;
@@ -18,7 +20,6 @@ import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import cross.glacier.events.GlacierEvents;
 
 import java.util.Stack;
 
@@ -27,6 +28,10 @@ public class NetServerHandlerMixin {
 
 	@Shadow
 	private EntityPlayerMP playerEntity;
+
+	/*
+	PlayerChatEvent Functionality
+	 */
 
 	@Unique
 	private static Stack<PlayerChatEvent> events = new Stack<>();
@@ -49,8 +54,12 @@ public class NetServerHandlerMixin {
 	public void sendPacket(Args args) {
 		PlayerChatEvent event = events.pop();
 		if (event == null) return;
-		args.set(0, String.format(event.getFormat(), event.player.getDisplayName(), event.getMessage()));
+		args.set(0, String.format(event.getFormat(), event.useRawUsername() ? event.player.username : event.player.getDisplayName(), event.getMessage()));
 	}
+
+	/*
+	BlockBreakEvent Functionality
+	 */
 
 	@Inject(method = "handleBlockDig", at = @At(value = "HEAD"), cancellable = true)
 
@@ -63,6 +72,11 @@ public class NetServerHandlerMixin {
 			event.block.world.notifyBlocksOfNeighborChange(event.block.x, event.block.y, event.block.z, event.block.getId());
         }
 	}
+
+	/*
+	PlayerQuitEvent Functionality
+	 */
+
 
 	@Unique
 	private static Stack<PlayerQuitEvent> playerQuitEvents = new Stack<>();
@@ -81,7 +95,45 @@ public class NetServerHandlerMixin {
 	public void onDisconnect(Args args) {
 		PlayerQuitEvent event = playerQuitEvents.pop();
 		if (event == null) return;
-		args.set(0, new Packet3Chat(String.format(event.format, this.playerEntity.getDisplayName())));
+		args.set(0, new Packet3Chat(String.format(event.format, event.useRawUsername() ? event.player.username : event.player.getDisplayName())));
 	}
 
+	/*
+	Window Events
+	 */
+	@Inject(
+		method = "handleWindowClick",
+		at = {@At("HEAD")},
+		remap = false, cancellable = true)
+	public void onWindowClick(Packet102WindowClick packet, CallbackInfo ci) {
+		WindowInteractEvent event = new WindowInteractEvent(this.playerEntity, packet);
+		GlacierEvents.runEventsFor(WindowInteractEvent.class, event);
+		if (event.isCancelled()) {
+			ci.cancel();
+			return;
+		}
+
+		GlacierInventory.InventoryPlayer invPlayer = GlacierInventory.getInventoryPlayer((EntityPlayerMP) event.player);
+		if (event.packet.rawPacket == null) return;
+		if (invPlayer.getId() == event.packet.rawPacket.window_Id) {
+			GlacierInventory inv = invPlayer.getInventory();
+			inv.getInteractions().forEach(it -> it.run(this.playerEntity, event.packet));
+			if (!inv.isInteractable()) {
+				inv.reloadFor((EntityPlayerMP) event.player);
+				event.setCancelled(true);
+			}
+		}
+	}
+	@Inject(
+		method = "handleCloseWindow",
+		at = {@At("HEAD")},
+		remap = false)
+	public void onWindowClose(Packet101CloseWindow packet, CallbackInfo ci) {
+		WindowCloseEvent event = new WindowCloseEvent(this.playerEntity, packet);
+		GlacierEvents.runEventsFor(WindowCloseEvent.class, event);
+		GlacierInventory.InventoryPlayer invPlayer = GlacierInventory.getInventoryPlayer((EntityPlayerMP) event.player);
+		if (invPlayer.getId() == packet.windowId) {
+			invPlayer.getInventory().removePlayer(event.player);
+		}
+	}
 }

@@ -7,6 +7,4 @@ public class PlayerUtils {
 	public static void sendMessage(EntityPlayerMP playerMP, String message) {
 		playerMP.playerNetServerHandler.sendPacket(new Packet3Chat(message));
 	}
-
-
 }

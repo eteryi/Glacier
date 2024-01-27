@@ -1,5 +1,6 @@
 package cross.glacier.events.impl;
 
+import cross.glacier.events.wrappers.BlockWrapper;
 import net.minecraft.core.net.packet.Packet14BlockDig;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 import cross.glacier.events.ServerEvent;

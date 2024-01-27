@@ -1,4 +1,4 @@
-package cross.glacier.events.impl;
+package cross.glacier.events.wrappers;
 
 import net.minecraft.core.block.Block;
 import net.minecraft.core.world.World;

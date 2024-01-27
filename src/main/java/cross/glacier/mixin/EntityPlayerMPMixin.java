@@ -1,5 +1,6 @@
 package cross.glacier.mixin;
 
+import cross.glacier.events.GlacierEvents;
 import cross.glacier.events.impl.PlayerHurtEvent;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.entity.player.EntityPlayer;
@@ -13,7 +14,6 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArgs;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
-import cross.glacier.events.GlacierEvents;
 
 import java.util.Stack;
 
@@ -29,6 +29,7 @@ public class EntityPlayerMPMixin extends EntityPlayer {
 
 	@Inject(method = "hurt", at = @At("HEAD"), cancellable = true)
 	public void onHurt(Entity attacker, int i, DamageType type, CallbackInfoReturnable<Boolean> cir) {
+		if (type == null) return;
 		PlayerHurtEvent event = new PlayerHurtEvent(this, attacker, type, i);
 		GlacierEvents.runEventsFor(PlayerHurtEvent.class, event);
 		if (event.isCancelled()) {
@@ -42,6 +43,7 @@ public class EntityPlayerMPMixin extends EntityPlayer {
 		at = @At(value = "INVOKE", target = "Lnet/minecraft/core/entity/player/EntityPlayer;hurt(Lnet/minecraft/core/entity/Entity;ILnet/minecraft/core/util/helper/DamageType;)Z", ordinal = 0)
 	)
 	public void doLogin(Args args) {
+		if (events.isEmpty()) return;
 		PlayerHurtEvent event = events.pop();
 		args.set(1, event.getDamage());
 	}

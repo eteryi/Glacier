@@ -1,6 +1,6 @@
 package cross.glacier.mixin;
 
-import cross.glacier.events.impl.BlockWrapper;
+import cross.glacier.events.wrappers.BlockWrapper;
 import net.minecraft.core.block.BlockChest;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.player.inventory.IInventory;

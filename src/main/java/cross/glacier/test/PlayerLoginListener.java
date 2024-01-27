@@ -15,7 +15,7 @@ public class PlayerLoginListener implements EventListener<PlayerJoinEvent> {
 		event.player.score = 0;
 		Location location = new Location(192.5, 135.0, 57.5, 0);
 		location.teleport(event.player);
-		event.format = TextFormatting.LIGHT_GRAY +  "[" + TextFormatting.LIME + "+" + TextFormatting.GRAY + "] %s " + TextFormatting.GRAY + "(" + (MinecraftServer.getInstance().playerList.playerEntities.size() + 1) + "/12)";
+		event.format = TextFormatting.LIGHT_GRAY +  "[" + TextFormatting.LIME + "+" + TextFormatting.LIGHT_GRAY + "]" + TextFormatting.YELLOW + " %s " + TextFormatting.GRAY + "(" + (MinecraftServer.getInstance().playerList.playerEntities.size() + 1) + "/12)";
 	}
 
 	@Override

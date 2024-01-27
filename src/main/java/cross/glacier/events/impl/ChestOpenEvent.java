@@ -1,6 +1,7 @@
 package cross.glacier.events.impl;
 
 import cross.glacier.events.ServerEvent;
+import cross.glacier.events.wrappers.BlockWrapper;
 import net.minecraft.core.entity.player.EntityPlayer;
 import net.minecraft.core.player.inventory.IInventory;
 

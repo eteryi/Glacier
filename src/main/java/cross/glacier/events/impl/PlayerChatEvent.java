@@ -10,9 +10,12 @@ public class PlayerChatEvent implements ServerEvent {
 	private final String[] message;
 	private String format;
 	private boolean cancel;
+
+	private boolean rawUsername;
 	public PlayerChatEvent(EntityPlayerMP player, Packet3Chat packet3Chat, String message) {
 		this.player = player;
 		this.packet = packet3Chat;
+		this.rawUsername = false;
 		this.message = new String[1];
 		this.message[0] = message;
 		this.format = "%1$s >> %2$s";
@@ -34,7 +37,13 @@ public class PlayerChatEvent implements ServerEvent {
 	public String getFormat() {
 		return format;
 	}
+	public boolean useRawUsername() {
+		return this.rawUsername;
+	}
 
+	public void shouldUseRawUsername(boolean b) {
+		this.rawUsername = b;
+	}
 	@Override
 	public void setCancelled(boolean b) {
 		this.cancel = b;

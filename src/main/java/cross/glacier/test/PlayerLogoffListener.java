@@ -8,7 +8,7 @@ import cross.glacier.events.impl.PlayerQuitEvent;
 public class PlayerLogoffListener implements EventListener<PlayerQuitEvent> {
 	@Override
 	public void run(PlayerQuitEvent event) {
-		event.format = TextFormatting.LIGHT_GRAY +  "[" + TextFormatting.RED + "-" + TextFormatting.GRAY + "] %s " + TextFormatting.GRAY + "(" + (MinecraftServer.getInstance().playerList.playerEntities.size() - 1) + "/12)";
+		event.format = TextFormatting.LIGHT_GRAY +  "[" + TextFormatting.RED + "-" + TextFormatting.LIGHT_GRAY + "] %s " + TextFormatting.GRAY + "(" + (MinecraftServer.getInstance().playerList.playerEntities.size() - 1) + "/12)";
 	}
 
 	@Override
