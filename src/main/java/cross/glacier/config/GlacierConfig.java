@@ -67,8 +67,8 @@ public class GlacierConfig {
 		this.config = new Config();
     }
 
-	public Object get(String key) {
-		return config.values.get(key);
+	public Object get(String key, Class expected) {
+		return gson.fromJson(gson.toJsonTree(config.values.get(key)).getAsJsonObject(), expected);
 	}
 
 	public Object getOrDefault(String key, Object o) {
