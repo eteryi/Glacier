@@ -30,6 +30,7 @@ public class NetLoginHandlerMixin {
 	private void sendEvent(Packet1Login packet1login, CallbackInfo ci, EntityPlayerMP entityplayermp) {
 		if (GlacierSettings.shouldResetNicknames()) {
 			entityplayermp.nickname = TextFormatting.RESET + entityplayermp.username;
+			entityplayermp.chatColor = (byte) TextFormatting.RESET.id;
 		}
 		PlayerJoinEvent event = new PlayerJoinEvent(entityplayermp, packet1login);
 		GlacierEvents.runEventsFor(PlayerJoinEvent.class, event);
