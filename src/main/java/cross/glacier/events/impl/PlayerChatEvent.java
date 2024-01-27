@@ -1,6 +1,7 @@
 package cross.glacier.events.impl;
 
 import cross.glacier.events.ServerEvent;
+import net.minecraft.core.net.command.TextFormatting;
 import net.minecraft.core.net.packet.Packet3Chat;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 
@@ -18,7 +19,7 @@ public class PlayerChatEvent implements ServerEvent {
 		this.rawUsername = false;
 		this.message = new String[1];
 		this.message[0] = message;
-		this.format = "%1$s >> %2$s";
+		this.format = "%1$s" + TextFormatting.RESET +  " >> %2$s";
 		this.cancel = false;
 	}
 
