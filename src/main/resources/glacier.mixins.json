@@ -9,7 +9,8 @@
     "EntityPlayerMPMixin",
     "ItemMixin",
     "NetLoginHandlerMixin",
-    "NetServerHandlerMixin"
+    "NetServerHandlerMixin",
+    "WorldServerMixin"
   ],
   "client": [
   ],

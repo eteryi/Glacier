@@ -14,16 +14,6 @@ public class Glacier implements ModInitializer, GameStartEntrypoint, RecipeEntry
     @Override
     public void onInitialize() {
 		LOGGER.info("Glacier was initialized");
-//		GlacierSettings.setResetNicknames(true);
-//		GlacierEvents.register(new PlayerLoginListener());
-//		GlacierEvents.register(new PlayerChatListener());
-//		GlacierEvents.register(new ChestOpenListener());
-//		GlacierEvents.register(new PlayerHurtListener());
-//		GlacierEvents.register(new BlockDigListener());
-//		GlacierEvents.register(new PlayerLogoffListener());
-//		GlacierCommands.register("test", new TeleportTesting());
-//		GlacierCommands.register("window", new DimensionTesting());
-//		GlacierCommands.register("config", new ConfigTest());
     }
 
 	@Override
