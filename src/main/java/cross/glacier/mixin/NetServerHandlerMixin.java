@@ -26,6 +26,16 @@ public abstract class NetServerHandlerMixin {
 	@Shadow
 	private EntityPlayerMP playerEntity;
 
+	@Inject(method = "handleFlying", at = @At(value = "HEAD"), cancellable = true)
+	public void onFlying(Packet10Flying packet, CallbackInfo ci) {
+		if (packet.moving) {
+			PlayerMoveEvent event = new PlayerMoveEvent(this.playerEntity, packet);
+			GlacierEvents.runEventsFor(PlayerMoveEvent.class, event);
+			if (event.isCancelled()) {
+				ci.cancel();
+            }
+		}
+	}
 	/*
 	PlayerChatEvent Functionality
 	 */

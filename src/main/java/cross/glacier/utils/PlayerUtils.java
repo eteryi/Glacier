@@ -1,6 +1,7 @@
 package cross.glacier.utils;
 
 import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.core.player.gamemode.Gamemode;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 
 public class PlayerUtils {
@@ -13,5 +14,7 @@ public class PlayerUtils {
 		for (int i = 0; i < playerMP.inventory.getSizeInventory(); i++) {
 			playerMP.inventory.setInventorySlotContents(i, null);
 		}
+		playerMP.score = 0;
+		playerMP.setGamemode(Gamemode.survival);
 	}
 }
