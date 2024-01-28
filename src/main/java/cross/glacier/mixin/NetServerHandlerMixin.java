@@ -5,10 +5,7 @@ import cross.glacier.events.GlacierEvents;
 import cross.glacier.events.impl.*;
 import cross.glacier.events.wrappers.BlockWrapper;
 import cross.glacier.inventory.GlacierInventory;
-import net.minecraft.core.net.packet.Packet101CloseWindow;
-import net.minecraft.core.net.packet.Packet102WindowClick;
-import net.minecraft.core.net.packet.Packet14BlockDig;
-import net.minecraft.core.net.packet.Packet3Chat;
+import net.minecraft.core.net.packet.*;
 import net.minecraft.server.entity.player.EntityPlayerMP;
 import net.minecraft.server.net.handler.NetServerHandler;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,7 +21,7 @@ import org.spongepowered.asm.mixin.injection.invoke.arg.Args;
 import java.util.Stack;
 
 @Mixin(value = NetServerHandler.class, remap = false)
-public class NetServerHandlerMixin {
+public abstract class NetServerHandlerMixin {
 
 	@Shadow
 	private EntityPlayerMP playerEntity;
@@ -70,6 +67,26 @@ public class NetServerHandlerMixin {
 			ci.cancel();
 			event.block.world.markBlockNeedsUpdate(event.block.x, event.block.y, event.block.z);
 			event.block.world.notifyBlocksOfNeighborChange(event.block.x, event.block.y, event.block.z, event.block.getId());
+		}
+	}
+
+	/*
+	BlockPlaceEvent Functionality
+	 */
+	@Inject(method = "handlePlace", at = @At(value = "HEAD"), cancellable = true)
+
+	public void handlePlace(Packet15Place packet, CallbackInfo ci) {
+		if (packet.xPosition == - 1 && packet.yPosition == -1 && packet.zPosition == -1) {
+			return;
+		}
+		BlockPlaceEvent event = new BlockPlaceEvent(this.playerEntity, packet);
+		GlacierEvents.runEventsFor(BlockPlaceEvent.class, event);
+		if (event.isCancelled()) {
+			ci.cancel();
+			BlockWrapper block = new BlockWrapper(packet.xPosition + packet.direction.getOffsetX(), packet.yPosition + packet.direction.getOffsetY(), packet.zPosition + packet.direction.getOffsetZ(), playerEntity.world);
+			playerEntity.world.markBlockNeedsUpdate(block.x, block.y, block.z);
+			playerEntity.world.notifyBlocksOfNeighborChange(block.x, block.y, block.z, block.getId());
+			playerEntity.playerNetServerHandler.sendPacket(new Packet104WindowItems(0, playerEntity.inventorySlots.inventoryItemStacks));
         }
 	}
 
